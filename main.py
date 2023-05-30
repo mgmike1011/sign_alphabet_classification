@@ -10,10 +10,10 @@ import sys
 #
 # Read input paths
 #
-# data_path = sys.argv[1]
-data_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/WZUM_dataset.csv' #Debug
-# output_path = sys.argv[1]
-output_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/output.txt' #Debug
+data_path = sys.argv[1]
+# data_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/WZUM_dataset.csv' #Debug
+output_path = sys.argv[2]
+# output_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/output.txt' #Debug
 #
 # Read data
 #
@@ -33,9 +33,8 @@ columns_to_drop = ['world_landmark_0.x','world_landmark_0.y','world_landmark_0.z
                    'world_landmark_16.x','world_landmark_16.y','world_landmark_16.z','world_landmark_17.x',
                    'world_landmark_17.y','world_landmark_17.z','world_landmark_18.x','world_landmark_18.y',
                    'world_landmark_18.z','world_landmark_19.x','world_landmark_19.y','world_landmark_19.z',
-                   'world_landmark_20.x','world_landmark_20.y','world_landmark_20.z','handedness.score', 'letter']
+                   'world_landmark_20.x','world_landmark_20.y','world_landmark_20.z','handedness.score', 'letter'] # remove 'letter'
 data_to_pred = data.drop(columns_to_drop, axis=1)
-# print(data_to_pred['handedness.label'])
 #
 # Encode handedness label
 #
