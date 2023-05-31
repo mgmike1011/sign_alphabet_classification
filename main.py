@@ -57,4 +57,4 @@ pred = mdl.predict(data_to_pred)
 pred = letter_encoder.inverse_transform(pred)
 with open(output_path, 'w') as file:
     for i, x in enumerate(pred):
-        file.writelines(f'{i}: {x}\n')
+        file.writelines(f'{x}\n')

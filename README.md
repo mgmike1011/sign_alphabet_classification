@@ -30,7 +30,7 @@ SCV : {'C': 1000, 'degree': 1, 'gamma': 0.9, 'kernel': 'poly'}
 python3 main.py /path/to/dataset/Dataset.csv /path/to/output.txt
 ```
 ## Struktura pliku wynikowego programu
-0: 'A'</br>
-1: 'X'</br>
-2: 'E'</br>
+a</br>
+x</br>
+e</br>
 ...
