@@ -6,9 +6,12 @@ oraz przygotowanie modelu uwzględniającego preprocessing danych i klasyfikator
 
 Program rozpoznaje znaki: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y'].
 ## Przygotowanie danych
-TODO
+Stworzone na potrzeby trenowania oraz testowania klasyfikatorów zbiory danych (przykładowe dostępne w katalogu datasets) były wynikiem współpracy całej grupy specjalizacji Roboty i Systemy Autonomiczne. Do przechowywania i wymiany danych użyty został system internetowych arkuszy kalkulacyjnych Google.
+### Analiza dostarczonych danych
+Pierwszym etapem zadania była analiza otrzymanych danych [Data_analysis](analysis/Data_analysis.ipynb). Rozpoczęto od sprawdzenia dostępnych znaczników pomiarowych, zakresu danych w poszczególnych kolumnach, podzieleniu na etykiety oraz dane właściwe, jak również wizualizacji danych w celu określenia ubytków i nieprawidłowości. Otrzymane dane charakteryzują się stosunkowo równomierną rozpiętością, jednak na dalszych etapach pracy zostały one sprowadzone do zerowej wartości średniej i jednostkowego odchylenia standardowego, w celu polepszenia uzyskiwanych wyników modelu. Na potrzeby uczenia klasyfikatora użyto jedynie znaczników względnych, odrzucając dane pochodzące z „układu świata”, dodatkowo dane z kolumny ‘handedness.label' zostały zamienione z postaci tekstowej na liczbową w postaci: {'Left': 0, 'Right': 1}. Etykiety danych również zostały zamienione na wartości liczbowe według wzoru: {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'k': 9, 'l': 10, 'm': 11, 'n': 12, 'o': 13, 'p': 14, 'q': 15, 'r': 16, 's': 17, 't': 18, 'u': 19, 'v': 20, 'w': 21, 'x': 22, 'y': 23}. 
+
 ## Wybór klasyfikatora
-TODO
+W celu wybrania odpowiedniego klasyfikatora przeprowadzono szereg testów dla różnych klasyfikatorów i parametrów dla nich [Model_selection](analysis/Model_selection.ipynb).
 ### Przeprowadzone testy
 W celu wybor odpowiedniego klasyfikatora przeprowadzone zostały testy z wykorzystaniem GridSearchCV. Parametrem wyboru była wartość 'accuracy'. Wyniki przedstawiono w tabeli:
 
@@ -24,5 +27,10 @@ W celu wybor odpowiedniego klasyfikatora przeprowadzone zostały testy z wykorzy
 SCV : {'C': 1000, 'degree': 1, 'gamma': 0.9, 'kernel': 'poly'}
 ## Uruchomienie programu
 ```console
-TODO
+python3 main.py /path/to/dataset/Dataset.csv /path/to/output.txt
 ```
+## Struktura pliku wynikowego programu
+0: 'A'</br>
+1: 'X'</br>
+2: 'E'</br>
+...
