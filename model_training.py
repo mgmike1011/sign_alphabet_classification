@@ -1,11 +1,16 @@
 from sklearn.pipeline import Pipeline
 import numpy as np
 import pandas as pd
+from sklearn.svm import SVC
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-
-df = pd.read_csv('WZUM dataset - Main.csv', index_col=0)
+from sklearn.ensemble import VotingClassifier
+from sklearn.svm import LinearSVC
+from sklearn.neural_network import MLPClassifier
+import pickle
+from sklearn.metrics import f1_score
+df = pd.read_csv('datasets/WZUM_dataset_v3.csv', index_col=0)
 
 columns_to_drop = ['world_landmark_0.x','world_landmark_0.y','world_landmark_0.z','world_landmark_1.x',
                    'world_landmark_1.y','world_landmark_1.z','world_landmark_2.x','world_landmark_2.y',
@@ -22,42 +27,36 @@ columns_to_drop = ['world_landmark_0.x','world_landmark_0.y','world_landmark_0.z
                    'world_landmark_16.x','world_landmark_16.y','world_landmark_16.z','world_landmark_17.x',
                    'world_landmark_17.y','world_landmark_17.z','world_landmark_18.x','world_landmark_18.y',
                    'world_landmark_18.z','world_landmark_19.x','world_landmark_19.y','world_landmark_19.z',
-                   'world_landmark_20.x','world_landmark_20.y','world_landmark_20.z','handedness.score', 'letter'] #,'handedness.label'
+                   'world_landmark_20.x','world_landmark_20.y','world_landmark_20.z','handedness.score',
+                   'letter','handedness.label'] #,'handedness.label'
 X = df.drop(columns_to_drop, axis=1)
 y = df['letter']
 
-
-
-handedness_label_encoder = LabelEncoder()
-X['handedness.label'] = handedness_label_encoder.fit_transform(X['handedness.label'])
-import pickle
-with open('handedness_label_encoder.pkl', 'wb') as file:
-    pickle.dump(handedness_label_encoder, file)
-# ---- Dodatek do label encoder
-handedness_label_encoder_keys = handedness_label_encoder.classes_
-handedness_label_encoder_values = handedness_label_encoder.transform(handedness_label_encoder.classes_)
-handedness_label_encoder_dictionary = dict(zip(handedness_label_encoder_keys, handedness_label_encoder_values))
-print(handedness_label_encoder_dictionary)
-# ----
-
-letter_encoder = LabelEncoder()
-y = letter_encoder.fit_transform(y)
-with open('letter_encoder.pkl', 'wb') as file:
-    pickle.dump(letter_encoder, file)
-# ---- Dodatek do letter encoder
-letter_encoder_keys = letter_encoder.classes_
-letter_encoder_values = letter_encoder.transform(letter_encoder.classes_)
-letter_encoder_dictionary = dict(zip(letter_encoder_keys, letter_encoder_values))
-print(letter_encoder_dictionary)
-# -----
+# letter_encoder = LabelEncoder()
+# y = letter_encoder.fit_transform(y)
+# with open('letter_encoder.pkl', 'wb') as file:
+#     pickle.dump(letter_encoder, file)
+# # ---- Dodatek do letter encoder
+# letter_encoder_keys = letter_encoder.classes_
+# letter_encoder_values = letter_encoder.transform(letter_encoder.classes_)
+# letter_encoder_dictionary = dict(zip(letter_encoder_keys, letter_encoder_values))
+# print(letter_encoder_dictionary)
+# # -----
 from sklearn.preprocessing import StandardScaler
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y, shuffle=True)
-from sklearn.svm import SVC
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, stratify=y, shuffle=True)
+
+# mdl_pipe = Pipeline([
+#     ('standard_scaler', StandardScaler()),
+#     ('classifier', SVC(C=1000, degree=1, gamma=0.9, kernel='poly'))
+# ])
 mdl_pipe = Pipeline([
     ('standard_scaler', StandardScaler()),
-    ('classifier', SVC(C=1000, degree=1, gamma=0.9, kernel='poly'))
+    ('classifier', VotingClassifier([
+        ('SVC_1', SVC(C=1000, degree=1, gamma=0.9, kernel='poly')),
+        ('MLP', MLPClassifier(max_iter=1000)),
+        ('Lin_SVC_1', LinearSVC(C=1000, dual=False, loss='squared_hinge', multi_class='ovr', penalty='l2', max_iter=10000))
+    ]))
 ])
-
 
 # sc = StandardScaler()
 # X_train = sc.fit_transform(X_train)
@@ -67,8 +66,9 @@ mdl_pipe = Pipeline([
 # mdl = SVC(C=1000, degree=1, gamma=0.9, kernel='poly')
 mdl_pipe.fit(X_train, y_train)
 score = mdl_pipe.score(X_test, y_test)
-print(score)
+print(f'Mean score TEST : {score}')
 score = mdl_pipe.score(X_train, y_train)
-print(score)
+print(f'Mean score TRAIN: {score}')
+print(f'F1 score: {f1_score(y_test, mdl_pipe.predict(X_test), average=None)}')
 with open('Model_SVC.pkl', 'wb') as file:
     pickle.dump(mdl_pipe, file)

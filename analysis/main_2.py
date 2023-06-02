@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-
-df = pd.read_csv('WZUM_dataset.csv', index_col=0)
+from sklearn.metrics import f1_score
+df = pd.read_csv('../datasets/WZUM_dataset_v3.csv', index_col=0)
 
 columns_to_drop = ['world_landmark_0.x','world_landmark_0.y','world_landmark_0.z','world_landmark_1.x',
                    'world_landmark_1.y','world_landmark_1.z','world_landmark_2.x','world_landmark_2.y',
@@ -51,9 +51,11 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
 from sklearn.svm import SVC
-mdl = SVC(C=1000, degree=1, gamma=0.9, kernel='poly')
+mdl = SVC(C=10000, degree=1, gamma=0.9, kernel='poly')
 mdl.fit(X_train, y_train)
 score = mdl.score(X_test, y_test)
 print(score)
 score = mdl.score(X_train, y_train)
 print(score)
+
+print(f'F1 score: {f1_score(y_test, mdl.predict(X_test),average=None)}')
