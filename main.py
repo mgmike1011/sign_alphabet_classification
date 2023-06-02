@@ -12,10 +12,10 @@ from sklearn.neural_network import MLPClassifier
 #
 # Read input paths
 #
-# data_path = sys.argv[1]
-data_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/datasets/Test_dataset.csv' #Debug
-# output_path = sys.argv[2]
-output_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/output.txt' #Debug
+data_path = sys.argv[1]
+# data_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/datasets/Test_dataset_no_letter_column.csv' #Debug
+output_path = sys.argv[2]
+# output_path = '/home/milosz/RiSA_1/WZUM/sign_alphabet_classification/output.txt' #Debug
 #
 # Read data
 #
@@ -36,7 +36,7 @@ columns_to_drop = ['world_landmark_0.x', 'world_landmark_0.y', 'world_landmark_0
                    'world_landmark_17.y', 'world_landmark_17.z', 'world_landmark_18.x', 'world_landmark_18.y',
                    'world_landmark_18.z', 'world_landmark_19.x', 'world_landmark_19.y', 'world_landmark_19.z',
                    'world_landmark_20.x', 'world_landmark_20.y', 'world_landmark_20.z', 'handedness.score',
-                   'handedness.label', 'letter'] # remove 'letter'
+                   'handedness.label']#, 'letter']
 data_to_pred = data.drop(columns_to_drop, axis=1)
 #
 # Load model and make prediction
